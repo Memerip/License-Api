@@ -1,0 +1,7 @@
+LICENSE API SETUP
+
+0.5. Clone the repo to wherver your using it
+
+1. Configure the whitelisted IPs
+
+2. Run "node index.js"
