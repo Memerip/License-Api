@@ -1,5 +1,5 @@
-> [!NOTE]
-> ⚠️ <b>USE AT YOUR OWN RISK</b> ⚠️
+> [!IMPORTANT NOTE]
+> ⚠️ <b>USE AT YOUR OWN RISK</b> ⚠️ </l>
 > This is not the most secure api there is probally some sort of vulnerablity
 
 # 🖥️ License Api 🖥️
