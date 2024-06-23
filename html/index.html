@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>License Key Generator</title>
+</head>
+<style>
+  body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  margin-top: 10%;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+}
+
+h1 {
+  text-align: center;
+}
+
+h2 {
+  padding-top: 5px;
+  text-align: center;
+  font-size: 15px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+label {
+  margin-bottom: 5px;
+}
+
+select, input {
+  padding: 8px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+#result {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #d9edf7;
+  border: 1px solid #bce8f1;
+  border-radius: 5px;
+}
+
+#message {
+  font-weight: bold;
+}
+
+#licenseKey, #expirationDate {
+  font-family: monospace;
+  margin: 5px 0;
+}
+
+</style>
+<body>
+  <div class="container">
+    <h1>License Key Generator</h1>
+    <form id="generateForm">
+      <label for="expiration">Select Expiration:</label>
+      <select name="expiration" id="expiration" onchange="toggleCustomExpiration()">
+        <option value="7_days">7 Days</option>
+        <option value="1_month">1 Month</option>
+        <option value="lifetime">Lifetime</option>
+        <option value="custom">Custom</option>
+      </select>
+
+      <div id="customExpiration" style="display: none;">
+        <label for="years">Years:</label>
+        <input type="number" name="years" id="years" min="0" max="99" value="0">
+        <label for="months">Months:</label>
+        <input type="number" name="months" id="months" min="0" max="11" value="0">
+        <label for="weeks">Weeks:</label>
+        <input type="number" name="weeks" id="weeks" min="0" max="51" value="0">
+        <label for="days">Days:</label>
+        <input type="number" name="days" id="days" min="0" max="6" value="0">
+        <br><label for="hours">Hours:</label>
+        <input type="number" name="hours" id="hours" min="0" max="23" value="0">
+        <label for="minutes">Minutes:</label>
+        <input type="number" name="minutes" id="minutes" min="0" max="59" value="0">
+        <label for="seconds">Seconds:</label>
+        <input type="number" name="seconds" id="seconds" min="0" max="59" value="0">
+      </div>
+
+      <button type="button" onclick="generateLicenseKey()">Generate License Key</button>
+    </form>
+
+    <div id="result">
+      <p id="message"></p>
+      <p id="licenseKey"></p>
+      <p id="expirationDate"></p>
+    </div>
+    <h2>Made by @memerip on Discord</h2>
+  </div>
+
+  <script>
+    function toggleCustomExpiration() {
+      const expirationSelect = document.getElementById('expiration');
+      const customExpirationDiv = document.getElementById('customExpiration');
+
+      if (expirationSelect.value === 'custom') {
+        customExpirationDiv.style.display = 'block';
+      } else {
+        customExpirationDiv.style.display = 'none';
+      }
+    }
+    
+    function generateLicenseKey() {
+      const expiration = document.getElementById('expiration').value;
+
+      if (expiration === 'custom') {
+        const years = parseInt(document.getElementById('years').value, 10);
+        const months = parseInt(document.getElementById('months').value, 10);
+        const weeks = parseInt(document.getElementById('weeks').value, 10);
+        const days = parseInt(document.getElementById('days').value, 10);
+        const hours = parseInt(document.getElementById('hours').value, 10);
+        const minutes = parseInt(document.getElementById('minutes').value, 10);
+        const seconds = parseInt(document.getElementById('seconds').value, 10);
+
+        expiration_date = new Date();
+        expiration_date.setFullYear(expiration_date.getFullYear() + years);
+        expiration_date.setMonth(expiration_date.getMonth() + months);
+        expiration_date.setDate(expiration_date.getDate() + weeks * 7 + days);
+        expiration_date.setHours(expiration_date.getHours() + hours);
+        expiration_date.setMinutes(expiration_date.getMinutes() + minutes);
+        expiration_date.setSeconds(expiration_date.getSeconds() + seconds);
+      } else if (expiration === '7_days') {
+        expiration_date = new Date();
+        expiration_date.setDate(expiration_date.getDate() + 7);
+      } else if (expiration === '1_month') {
+        expiration_date = new Date();
+        expiration_date.setMonth(expiration_date.getMonth() + 1);
+      } else if (expiration === 'lifetime') {
+        expiration_date = null;
+      }
+
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', '/api/generate-license', true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+          if (xhr.status === 201) {
+            const response = JSON.parse(xhr.responseText);
+            const message = response.message;
+            const licenseKey = response.license_key;
+            const expirationDate = response.expiration_date;
+
+            document.getElementById('message').textContent = message;
+            document.getElementById('licenseKey').textContent = 'License Key: ' + licenseKey;
+            document.getElementById('expirationDate').textContent = expirationDate ? 'Expiration Date: ' + expirationDate : '';
+            document.getElementById('result').style.display = 'block';
+          } else {
+            console.error('Failed to generate license key.');
+          }
+        }
+      };
+
+      const data = {
+        expiration: expiration,
+      };
+
+      if (expiration === 'custom') {
+        data.custom_expiration_date = expiration_date.toISOString();
+      }
+
+      xhr.send(JSON.stringify(data));
+    }
+  </script>
+</body>
+</html>
