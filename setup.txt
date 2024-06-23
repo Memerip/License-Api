@@ -5,3 +5,5 @@ LICENSE API SETUP
 1. Configure the whitelisted IPs
 
 2. Run "node index.js"
+
+3. Delete both "setup.txt" & "readme.md" or dont doesn't really matter
