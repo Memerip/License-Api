@@ -1,3 +1,6 @@
+> [!NOTE]
+> Not the most secure api there is probally some sort of vulnerablity use at own risk
+
 # 🖥️ License Api 🖥️
 
 ## 📰 Description
